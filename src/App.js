@@ -7,17 +7,18 @@ import SideBar from "./components/controls/SideBar";
 import Cattle from "./components/view/Cattle";
 import Box from "@mui/joy/Box";
 import Crop from "./components/view/Crop";
-import SellCrop from "./components/view/Sell";
+import Sell from "./components/view/Sell";
 import Fields from "./components/view/Fields";
 import Snackbar from "./components/view/Snackbar";
 import Modal from "./components/view/Modal"
 import Corral from "./components/view/Corral";
-import {apis, getCookie} from "./utils/utils";
+import {apis, INITIAL_STATE} from "./utils/utils";
+import Buy from "./components/view/Buy";
 
 export const UserContext = createContext(null);
 
 function App() {
-    const [state, setState] = useState({user:{token:getCookie('token'), username: ''}, tab: 0, podTab: 0, modalData: {}});
+    const [state, setState] = useState(INITIAL_STATE);
     const api = apis(state);
     console.log(state)
     let currentScreen;
@@ -35,13 +36,16 @@ function App() {
             currentScreen = <Corral state={state} setState={setState} api={api} />
             break;
         case 4:
-            currentScreen = <SellCrop state={state} setState={setState} api={api} />
+            currentScreen = <Sell state={state} setState={setState} api={api} />
+            break;
+        case 5:
+            currentScreen = <Buy state={state} setState={setState} api={api} />
             break;
     }
     return (
         <UserContext.Provider value={{api}}>
             <div className="App">
-                <Header user={state?.user} />
+                <Header user={state?.user} state={state} setState={setState} api={api} />
                 {
                     !state?.user?.token
                         ? (state?.sign
@@ -53,7 +57,7 @@ function App() {
                         </Box>
                 }
                 <Snackbar state={state} setState={setState} />
-                <Modal state={state} setState={setState} />
+                <Modal state={state} setState={setState} api={api} />
             </div>
         </UserContext.Provider>
     );

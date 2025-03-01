@@ -78,6 +78,7 @@ export default function SignUp({toggleState, setState, state}) {
         <Button sx={{ mt: 1 /* margin top */ }} onClick={async () => {
             const response = await signUp({username, password, firstName, email});
             const token = await response.json();
+            localStorage.setItem('token', token?.token);
             setState({...state, user: {token: token?.token, username: username}});
         }}>Зарегистрироваться</Button>
         <Button

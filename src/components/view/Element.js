@@ -15,20 +15,10 @@ import Button from "@mui/material/Button";
 
 
 export default function Element(props) {
-  const { category, title, rareFind = false, liked = false, action, state, setState } = props;
+  const { category, title, rareFind = false, liked = false, action, state, setState, createDate, place, amount, key, onAction } = props;
   const [isLiked, setIsLiked] = React.useState(liked);
-  let img;
-    switch (category) {
-        case 'Забой':
-            img = <Clear/>;
-            break;
-        case 'Разделка':
-            img = <KebabDining />
-            break;
-        default:
-            img = <LocalDining />
-    };
-    let curAction = action ?? (['Свинья', 'Корова'].includes(category) ? 'Забить' : 'Собрать');
+  const img = <LocalDining />;
+  const curAction = action ?? (['Свинья', 'Корова'].includes(category) ? 'Забить' : 'Собрать');
   return (
     <Card
       variant="outlined"
@@ -134,18 +124,19 @@ export default function Element(props) {
           sx={{ flexWrap: 'wrap', my: 0.25 }}
         >
           <Typography level="body-xs" startDecorator={<CalendarMonth />}>
-            14.10.2020
+              {createDate}
           </Typography>
           <Typography level="body-xs" startDecorator={<Place />}>
-            Загон
+              {place}
           </Typography>
           <Typography level="body-xs" startDecorator={<BarChart />}>
-            Хорошее
+              {amount}
           </Typography>
         </Stack>
         <Stack direction="row" sx={{ mt: 'auto' }}>
           <Button level="title-lg" sx={{ flexGrow: 1, textAlign: 'right' }} onClick={() => {
               setState({...state, open: true});
+              onAction();
           }}>
               {curAction}
           </Button>

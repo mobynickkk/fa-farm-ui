@@ -16,13 +16,22 @@ export default function Corral({state, setState, api}) {
             setCorrals(data);
         }
         getData();
-    }, []);
-    return (<Sheet sx={{display: 'flex', flexDirection: 'row', width: '80vw', alignItems: 'center',
+    }, [api, setCorrals]);
+    return (<Sheet sx={{display: 'flex', flexDirection: 'column', width: '80vw', alignItems: 'center',
         justifyContent: 'center'}}>
         <Stack spacing={2} sx={{px: {xs: 2, md: 4}, pt: 2, minHeight: 0}}>
             <Stack spacing={2} sx={{overflowY: 'auto', height: '75vh'}}>
                 {corrals
-                    && corrals.map(field => <Element category="Загон" title={field.name} action="Заселить" state={state} setState={setState} />)}
+                    && corrals.map(corral =>
+                        <Element category="Загон"
+                                 key={corral?.id}
+                                 title={corral.name}
+                                 place={corral.place}
+                                 createDate={corral.acquisitionDate}
+                                 amount={corral.capacity}
+                                 action=""
+                                 state={state}
+                                 setState={setState} />)}
             </Stack>
         </Stack>
         <Box

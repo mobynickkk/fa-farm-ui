@@ -39,7 +39,7 @@ export default function Snackbaritto({state, setState}) {
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleClose}
-                message="Добавлена туша"
+                message="Готово"
                 action={action}
             />
         </div>

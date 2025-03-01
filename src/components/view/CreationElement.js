@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 
 
 export default function CreationElement(props) {
-    const { category, title, rareFind = false, liked = false, action, state, setState } = props;
+    const { category, title, rareFind = false, liked = false, action, state, setState, createDate, place, amount } = props;
     const [isLiked, setIsLiked] = React.useState(liked);
     let img;
     switch (category) {
@@ -134,13 +134,13 @@ export default function CreationElement(props) {
                     sx={{ flexWrap: 'wrap', my: 0.25 }}
                 >
                     <Typography level="body-xs" startDecorator={<CalendarMonth />}>
-                        14.10.2020
+                        {createDate}
                     </Typography>
                     <Typography level="body-xs" startDecorator={<Place />}>
-                        Загон
+                        {place}
                     </Typography>
                     <Typography level="body-xs" startDecorator={<BarChart />}>
-                        Хорошее
+                        {amount}
                     </Typography>
                 </Stack>
                 <Stack direction="row" sx={{ mt: 'auto' }}>

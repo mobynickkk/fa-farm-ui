@@ -3,9 +3,26 @@ import Box from '@mui/joy/Box';
 import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
 import Sheet from '@mui/joy/Sheet';
-import {Agriculture, Key, Person, Search} from "@mui/icons-material";
+import {Agriculture, Key, Logout, MonetizationOn, Person, Search} from "@mui/icons-material";
+import {Typography} from "@mui/material";
+import {useEffect, useState} from "react";
+import {INITIAL_STATE} from "../../utils/utils";
 
-export default function ColorInversionHeader({user}) {
+export default function ColorInversionHeader({user, api, state, setState}) {
+    const [balance, setBalance] = useState(null);
+    const [logoutHover, setLogoutHover] = useState(false);
+    useEffect(() => {
+        async function getData() {
+            if(!user?.token) {
+                setBalance('No balance');
+                return;
+            }
+            const res = await api.getBalance();
+            const data = await res.json();
+            setBalance(data);
+        }
+        getData();
+    }, [user?.token, api, setBalance]);
     const color = 'primary';
     return (
         <Sheet
@@ -30,21 +47,21 @@ export default function ColorInversionHeader({user}) {
                 <Agriculture />
             </Box>
             <Box sx={{ display: 'flex', flexShrink: 0, gap: 2 }}>
-                <Input
-                    placeholder="Поиск"
-                    variant="soft"
-                    size="sm"
-                    endDecorator={
-                        <Search />
-                    }
-                    sx={{
-                        '--Input-paddingInline': '12px',
-                        width: 160,
-                        display: { xs: 'none', lg: 'flex' },
-                    }}
-                />
-                <IconButton variant="soft" sx={{ borderRadius: '50%' }}>
-                    { user ? <Person /> : <Key /> }
+                <Box sx={{ display: 'flex', flexShrink: 0, gap: 2 }}>
+                    <MonetizationOn />
+                    <Typography>
+                        {balance}
+                    </Typography>
+                </Box>
+                <IconButton variant="soft" sx={{ borderRadius: '50%' }}
+                            onMouseEnter={() => setLogoutHover(true)}
+                            onMouseLeave={() => setLogoutHover(false)}
+                            onClick={() => {
+                                localStorage.clear();
+                                setState(INITIAL_STATE);
+                            }}
+                >
+                    { user?.token ? (logoutHover ? <Logout /> : <Person />) : <Key /> }
                 </IconButton>
             </Box>
         </Sheet>

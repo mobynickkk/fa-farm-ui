@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Button from '@mui/material/Button';
-import {FormControl, FormLabel, Input, Link, Typography} from "@mui/material";
+import {FormControl, FormLabel, Input, Typography} from "@mui/material";
 import {Sheet} from "@mui/joy";
-import {useState} from "react";
 import {login} from "../../utils/api";
 
 export default function Login({toggleState, setState, state}) {
@@ -54,6 +54,7 @@ export default function Login({toggleState, setState, state}) {
         <Button sx={{ mt: 1 /* margin top */ }} onClick={async () => {
             const response = await login(username, password);
             const token = await response.json();
+            localStorage.setItem('token', token?.token);
             setState({...state, user: {token: token?.token, username: username}});
         }}>Войти</Button>
         <Button

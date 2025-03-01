@@ -14,13 +14,19 @@ import {
 
 import Button from "@mui/material/Button";
 
-export default function BasicModal({state, setState}) {
+export default function BasicModal({state, setState, api}) {
     const open = state.modal;
     const setOpen = x => setState({...state, modal: x})
-    const modalData = state?.modalData;
-    const [data, setData] = useState({subject: modalData.subject, amount: 0});
-    const handleClose = () => setOpen(false);
-
+    const [subj, setSubj] = useState('');
+    const [name, setName] = useState('');
+    const [place, setPlace] = useState('');
+    console.log(name)
+    const handleClose = () => {
+        setOpen(false);
+        setSubj('');
+        setName('');
+        setPlace('');
+    }
     return (
         <div>
             <Dialog disableEscapeKeyDown open={open} onClose={handleClose} sx={{width: '500'}}>
@@ -31,40 +37,38 @@ export default function BasicModal({state, setState}) {
                             <InputLabel htmlFor="demo-dialog-native">Предмет покупки</InputLabel>
                             <Select fullWidth
                                 variant='outlined'
-                                native
-                                value={data?.subject}
-                                onChange={(event, value) => setData({...data, subject: value})}
+                                value={subj}
+                                onChange={(event, value) => {
+                                    setSubj(value.props.value);
+                                }}
                                 input={<OutlinedInput label="Предмет покупки" id="demo-dialog-native" />}
                             >
-                                <option aria-label="None" value="" />
-                                <option value={"field"}>Поле</option>
-                                <option value={"corral"}>Загон</option>
+                                <MenuItem value="field">Поле</MenuItem>
+                                <MenuItem value="corral">Загон</MenuItem>
                             </Select>
                         </FormControl>
-                        {modalData?.resource && (
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel htmlFor="dialog-sup">Предмет покупки</InputLabel>
-                                <Select fullWidth
-                                        variant='outlined'
-                                        native
-                                        value={data?.subject}
-                                        onChange={(event, value) => setData({...data, subject: value})}
-                                        input={<OutlinedInput label="Предмет покупки" id="dialog-sup" />}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={"pig"}>Свинья</option>
-                                    <option value={"cow"}>Корова</option>
-                                </Select>
-                            </FormControl>
-                        )}
                         <FormControl>
-                            <TextField id="outlined-basic" label="Количество" variant="outlined" defaultValue="1" />
+                            <TextField id="name" label="Название" variant="outlined" placeholder="Ёмкость живой плоти"
+                                       value={name} onChange={event => setName(event.target.value)} />
+                        </FormControl>
+                        <FormControl>
+                            <TextField id="place" label="Местоположение" variant="outlined" placeholder="Москва"
+                                       value={place} onChange={event => setPlace(event.target.value)} />
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Отмена</Button>
-                    <Button onClick={handleClose}>Ok</Button>
+                    <Button onClick={async () => {
+                        const dto = {name: name, place: place};
+                        console.log(dto)
+                        if (subj === 'field') {
+                            await api.addField(dto)
+                        } else if (subj === 'corral') {
+                            await api.addCorral(dto)
+                        }
+                        handleClose();
+                    }}>Ok</Button>
                 </DialogActions>
             </Dialog>
         </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Sheet} from "@mui/joy";
-import Element from "./CreationElement";
+import Element from "./Element";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 import Button from "@mui/material/Button";
@@ -16,12 +16,21 @@ export default function Fields({state, setState, api}) {
             setFields(data);
         }
         getData();
-    }, []);
-    return (<Sheet sx={{display: 'flex', flexDirection: 'row', width: '80vw', alignItems: 'center',
+    }, [api, setFields]);
+    return (<Sheet sx={{display: 'flex', flexDirection: 'column', width: '80vw', alignItems: 'center',
         justifyContent: 'center'}}>
         <Stack spacing={2} sx={{px: {xs: 2, md: 4}, pt: 2, minHeight: 0}}>
             <Stack spacing={2} sx={{overflowY: 'auto', height: '75vh'}}>
-                {fields && fields.map(field => <Element category="Поле" title={field.name} action="Засеять" state={state} setState={setState} />)}
+                {fields && fields.map(field =>
+                    <Element category="Поле"
+                             title={field.name}
+                             key={field.id}
+                             place={field.place}
+                             createDate={field.acquisitionDate}
+                             amount="Бескрайнее"
+                             action=""
+                             state={state}
+                             setState={setState} />)}
             </Stack>
         </Stack>
         <Box

@@ -60,6 +60,7 @@ export default function SideBar({state, setState}) {
                         <ListSubheader>Рынок</ListSubheader>
                         <List>
                             <ListItemButton selected={tab === 4} onClick={() => setTab(4)}>Продажа</ListItemButton>
+                            <ListItemButton selected={tab === 5} onClick={() => setTab(5)}>Покупка</ListItemButton>
                         </List>
                     </ListItem>
                 </List>
